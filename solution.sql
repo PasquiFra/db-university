@@ -85,7 +85,10 @@ WHERE T.name = 'Fulvio' AND T.surname = 'Amato'
 
 -- 4. Selezionare tutti gli studenti con i dati relativi al corso di laurea a cui sono iscritti e il relativo dipartimento, in ordine alfabetico per cognome e nome
 
-
+SELECT S.id AS 'Student_ID', S.surname AS 'Cognome', S.name  AS 'Nome', Deg.name AS 'Nome corso', Deg.level, Deg.website, Dep.name AS 'Nome Dipartimento' FROM `students` AS S
+JOIN `degrees` AS Deg ON Deg.id=S.degree_id
+JOIN `departments` AS Dep ON Dep.id=Deg.department_id
+ORDER BY S.surname ASC
 
 -- 5. Selezionare tutti i corsi di laurea con i relativi corsi e insegnanti
 -- 6. Selezionare tutti i docenti che insegnano nel Dipartimento di Matematica (54)
