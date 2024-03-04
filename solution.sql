@@ -107,6 +107,17 @@ ORDER BY Deg.id ASC
 
 -- 6. Selezionare tutti i docenti che insegnano nel Dipartimento di Matematica (54)
 
-
+SELECT DISTINCT
+Dep.name AS 'Department_name',
+T.id AS 'Teacher_id',
+T.surname AS 'Teacher_surname',
+T.name AS 'Teacher_name'
+FROM `teachers` AS T
+JOIN `course_teacher` AS CT ON CT.teacher_id=T.id
+JOIN `courses` AS C ON C.id = CT.course_id
+JOIN `degrees` AS Deg ON Deg.id=C.degree_id
+JOIN `departments` AS Dep ON Dep.id=Deg.department_id
+WHERE Dep.name = 'Dipartimento di Matematica'
+ORDER BY T.id ASC
 
 -- 7. BONUS: Selezionare per ogni studente quanti tentativi d’esame ha sostenuto per superare ciascuno dei suoi esami
