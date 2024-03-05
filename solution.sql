@@ -78,14 +78,16 @@ WHERE `departments`.`name`= 'Dipartimento di Neuroscienze'
 
 -- 3. Selezionare tutti i corsi in cui insegna Fulvio Amato (id=44)
 
-SELECT T.id AS 'Teacher_ID', C.id AS 'Course_ID', C.name AS 'Course_Name' FROM `courses` AS C
+SELECT T.id AS 'Teacher_ID', C.id AS 'Course_ID', C.name AS 'Course_Name' 
+FROM `courses` AS C
 INNER JOIN `course_teacher` AS CT ON CT.course_id = C.id
 JOIN `teachers` AS T ON T.id = CT.teacher_id
 WHERE T.name = 'Fulvio' AND T.surname = 'Amato'
 
 -- 4. Selezionare tutti gli studenti con i dati relativi al corso di laurea a cui sono iscritti e il relativo dipartimento, in ordine alfabetico per cognome e nome
 
-SELECT S.id AS 'Student_ID', S.surname AS 'Cognome', S.name  AS 'Nome', Deg.name AS 'Nome corso', Deg.level, Deg.website, Dep.name AS 'Nome Dipartimento' FROM `students` AS S
+SELECT S.id AS 'Student_ID', S.surname AS 'Cognome', S.name  AS 'Nome', Deg.name AS 'Nome corso', Deg.level, Deg.website, Dep.name AS 'Nome Dipartimento' 
+FROM `students` AS S
 JOIN `degrees` AS Deg ON Deg.id=S.degree_id
 JOIN `departments` AS Dep ON Dep.id=Deg.department_id
 ORDER BY S.surname ASC
@@ -126,15 +128,18 @@ SELECT
     S.id AS 'Student_ID', 
     S.name AS 'Student_name', 
     S.surname AS 'Student_surname', 
+    C.name AS 'Nome Corso',
     COUNT(`exam_student`.vote) AS 'Num_tries',
-    COUNT(DISTINCT `exam_student`.`exam_id`) AS 'Num_exams'
+    MAX(`exam_student`.`vote`) AS `voto_massimo`
 FROM 
     `exam_student`
 JOIN 
     `students` AS S ON S.id = `exam_student`.`student_id` 
 JOIN 
     `exams` AS E ON E.id = `exam_student`.`exam_id` 
+JOIN 
+    `courses` AS C ON C.id = E.course_id
 GROUP BY 
-    S.id, S.name, S.surname
-ORDER BY 
-    S.id ASC;
+    S.id, C.id
+HAVING 
+    `voto_massimo` >= 18;
